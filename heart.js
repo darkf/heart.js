@@ -16,7 +16,7 @@ var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
 			  bg: {r: 127, g: 127, b: 127}, /* background color */
 			  _size: {w: 800, h: 600}, /* size of viewport */
 			  _syncLoading: [] /* for synchronous image loading */
-            };
+			};
 var love = heart; /* for interoperability with the love API */
 
 var HeartImage = function(img) {
@@ -62,7 +62,7 @@ heart.graphics = {
 		var i = heart._syncLoading.length;
 		heart._syncLoading.push(img);
 		img.onload = function() {
-			heart._syncLoading.splice(i, 1); /* remove img from the loading sequence\ */
+			heart._syncLoading.splice(i, 1); /* remove img from the loading sequence */
 		};
 		img.src = src;
 		return new HeartImage(img);
