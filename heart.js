@@ -14,9 +14,22 @@ var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
 			  _fps: 0, /* frames per second */
 			  _targetFPS: 30, /* the target FPS cap */
 			  bg: {r: 127, g: 127, b: 127}, /* background color */
-			  _size: {w: 800, h: 600} /* size of viewport */
-			};
+			  _size: {w: 800, h: 600}, /* size of viewport */
+			  _syncLoading: [] /* for synchronous image loading */
+            };
 var love = heart; /* for interoperability with the love API */
+
+var HeartImage = function(img) {
+	this.img = img;
+};
+
+HeartImage.prototype.getWidth = function() {
+	return this.img.width;
+};
+
+HeartImage.prototype.getHeight = function() {
+	return this.img.height;
+};
 
 heart.graphics = {
 	rectangle: function(mode, x, y, w, h) {
@@ -33,6 +46,25 @@ heart.graphics = {
 	setColor: function(r, g, b) {
 		heart.ctx.fillStyle = heart.ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
 	},
+
+	newImage: function(src) {
+		/* synchronously load image */
+		/* XXX: does not handle errors */
+		var img = new Image();
+		var i = heart._syncLoading.length;
+		heart._syncLoading.push(img);
+		img.onload = function() {
+			heart._syncLoading.splice(i, 1); /* remove img from the loading sequence\ */
+		};
+		img.src = src;
+		return new HeartImage(img);
+	},
+
+	draw: function(drawable, x, y) {
+		if(drawable.img !== undefined) {
+			heart.ctx.drawImage(drawable.img, x, y);
+		}
+	}
 };
 
 heart.timer = {
@@ -49,18 +81,21 @@ heart._init = function() {
 };
 
 heart._tick = function() {
-	var time = new Date().getTime();
-	heart._dt = time - heart._lastTick;
-	heart._lastTick = time;
-	heart._fps = Math.floor(1000 / heart._dt);
+	/* if we're waiting on images to load, skip the frame */
+	if(heart._syncLoading.length === 0) {
+		var time = new Date().getTime();
+		heart._dt = time - heart._lastTick;
+		heart._lastTick = time;
+		heart._fps = Math.floor(1000 / heart._dt);
 
-	if(heart.update)
-		heart.update(heart._dt / 1000);
+		if(heart.update)
+			heart.update(heart._dt / 1000);
 
-	heart.ctx.fillStyle = "rgb("+heart.bg.r+","+heart.bg.g+","+heart.bg.b+")";
-	heart.ctx.fillRect(0, 0, heart._size.w, heart._size.h);
-	if(heart.draw)
-		heart.draw();
+		heart.ctx.fillStyle = "rgb("+heart.bg.r+","+heart.bg.g+","+heart.bg.b+")";
+		heart.ctx.fillRect(0, 0, heart._size.w, heart._size.h);
+		if(heart.draw)
+			heart.draw();
+	}
 
 	setTimeout(heart._tick, 1000 / heart._targetFPS);
 }
