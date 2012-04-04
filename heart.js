@@ -1,5 +1,6 @@
 /* heart.js v0.0.1
    copyright (c) 2012 darkf
+   licensed under the terms of the MIT license, see LICENSE for details
 
    A Canvas-based graphics library inspired by (i.e. cloned from) Love 2D (https://love2d.org/)
    It's currently in its pre-alpha development stage, so don't expect anything to work,
