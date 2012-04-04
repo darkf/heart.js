@@ -9,7 +9,13 @@
    Thank you for using heart.js! :-)
 */
 
-var heart = {_lastTick: new Date().getTime(), _dt: 0, _fps: 0, _targetFPS: 30, bg: {r: 127, g: 127, b: 127}, _size: {w: 800, h: 600}};
+var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
+			  _dt: 0, /* time since last tick in seconds */
+			  _fps: 0, /* frames per second */
+			  _targetFPS: 30, /* the target FPS cap */
+			  bg: {r: 127, g: 127, b: 127}, /* background color */
+			  _size: {w: 800, h: 600} /* size of viewport */
+			};
 var love = heart; /* for interoperability with the love API */
 
 heart.graphics = {
