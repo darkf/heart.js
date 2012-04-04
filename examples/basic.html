@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>heart.js test</title>
+<script src="../heart.js"></script>
+<script>
+var player = {x: 50, y: 50, speed: 10};
+
+love.load = function() {
+	love.attach("cnv");
+}
+
+love.update = function(dt) {
+	player.x += player.speed * dt;
+	player.y += player.speed * dt;
+}
+
+love.draw = function() {
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.rectangle("fill", player.x, player.y, 100, 100);
+
+	love.graphics.setColor(255, 255, 0);
+	love.graphics.print("fps: " + love.graphics.getFPS(), 10, 10);
+}
+
+</script>
+</head>
+<body>
+
+<canvas id="cnv" width="800" height="600">your browser doesn't support &lt;canvas&gt;</canvas>
+
+</body>
+</html>
