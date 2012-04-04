@@ -47,6 +47,14 @@ heart.graphics = {
 		heart.ctx.fillStyle = heart.ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
 	},
 
+	getWidth: function() {
+		return heart._size.w;
+	},
+
+	getHeight: function() {
+		return heart._size.h;
+	},
+
 	newImage: function(src) {
 		/* synchronously load image */
 		/* XXX: does not handle errors */
