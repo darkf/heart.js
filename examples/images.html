@@ -10,7 +10,7 @@ var img = {x: 0, y: 0, v: {x: speed, y: speed}, img: null};
 
 var screenHeight, screenWidth;
 
-love.load = function() {
+heart.load = function() {
 	heart.attach("cnv");
 	img.img = heart.graphics.newImage("heart.png");
 	img.w = img.img.getWidth();
@@ -20,7 +20,7 @@ love.load = function() {
 	screenHeight = heart.graphics.getHeight();
 }
 
-love.update = function(dt) {
+heart.update = function(dt) {
 	img.x += img.v.x * dt;
 	img.y += img.v.y * dt;
 
@@ -30,7 +30,7 @@ love.update = function(dt) {
 		img.v.x = -img.v.x;
 }
 
-love.draw = function() {
+heart.draw = function() {
 	heart.graphics.draw(img.img, img.x, img.y);
 
 	heart.graphics.setColor(255, 255, 0);

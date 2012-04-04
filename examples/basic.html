@@ -7,21 +7,21 @@
 
 var square = {x: 50, y: 50, speed: 10};
 
-love.load = function() {
-	love.attach("cnv");
+heart.load = function() {
+	heart.attach("cnv");
 }
 
-love.update = function(dt) {
+heart.update = function(dt) {
 	square.x += square.speed * dt;
 	square.y += square.speed * dt;
 }
 
-love.draw = function() {
-	love.graphics.setColor(255, 255, 255)
-	love.graphics.rectangle("fill", square.x, square.y, 100, 100);
+heart.draw = function() {
+	heart.graphics.setColor(255, 255, 255)
+	heart.graphics.rectangle("fill", square.x, square.y, 100, 100);
 
-	love.graphics.setColor(255, 255, 0);
-	love.graphics.print("fps: " + love.timer.getFPS(), 10, 10);
+	heart.graphics.setColor(255, 255, 0);
+	heart.graphics.print("fps: " + heart.timer.getFPS(), 10, 10);
 }
 
 </script>
