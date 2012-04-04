@@ -66,7 +66,7 @@ heart.attach = function(canvas) {
 	heart.canvas = el;
 	heart.ctx = heart.canvas.getContext("2d");
 	if(!heart.ctx)
-		akert("couldn't get canvas context")
+		alert("couldn't get canvas context")
 };
 
 
