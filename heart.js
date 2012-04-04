@@ -15,7 +15,7 @@ var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
 			  _targetFPS: 30, /* the target FPS cap */
 			  bg: {r: 127, g: 127, b: 127}, /* background color */
 			  _size: {w: 800, h: 600}, /* size of viewport */
-			  _syncLoading: [] /* for synchronous image loading */
+			  _imagesLoading: [] /* for synchronous image loading */
 			};
 
 var HeartImage = function(img) {
@@ -54,17 +54,17 @@ heart.graphics = {
 		return heart._size.h;
 	},
 
-	newImage: function(src) {
-		/* synchronously load image */
+	newImage: function(src, callback) {
+		/* load an image */
 		/* XXX: does not handle errors */
 		var img = new Image();
-		var i = heart._syncLoading.length;
-		heart._syncLoading.push(img);
+		var i = heart._imagesLoading.length;
+		heart._imagesLoading.push(img);
 		img.onload = function() {
-			heart._syncLoading.splice(i, 1); /* remove img from the loading sequence */
+			heart._imagesLoading.splice(i, 1); /* remove img from the loading sequence */
+			callback(new HeartImage(img));
 		};
 		img.src = src;
-		return new HeartImage(img);
 	},
 
 	draw: function(drawable, x, y) {
@@ -81,28 +81,33 @@ heart.timer = {
 };
 
 heart._init = function() {
+	if(heart._imagesLoading.length !== 0) {
+		setTimeout(heart._init, 30 /* ms */);
+		return;
+	}
+
 	if(heart.load !== undefined)
 		heart.load();
 	if(heart.canvas === undefined || heart.ctx === undefined)
 		alert("no canvas");
+
+	heart._tick(); /* first tick */
 };
 
 heart._tick = function() {
 	/* if we're waiting on images to load, skip the frame */
-	if(heart._syncLoading.length === 0) {
-		var time = new Date().getTime();
-		heart._dt = time - heart._lastTick;
-		heart._lastTick = time;
-		heart._fps = Math.floor(1000 / heart._dt);
+	var time = new Date().getTime();
+	heart._dt = time - heart._lastTick;
+	heart._lastTick = time;
+	heart._fps = Math.floor(1000 / heart._dt);
 
-		if(heart.update)
-			heart.update(heart._dt / 1000);
+	if(heart.update)
+		heart.update(heart._dt / 1000);
 
-		heart.ctx.fillStyle = "rgb("+heart.bg.r+","+heart.bg.g+","+heart.bg.b+")";
-		heart.ctx.fillRect(0, 0, heart._size.w, heart._size.h);
-		if(heart.draw)
-			heart.draw();
-	}
+	heart.ctx.fillStyle = "rgb("+heart.bg.r+","+heart.bg.g+","+heart.bg.b+")";
+	heart.ctx.fillRect(0, 0, heart._size.w, heart._size.h);
+	if(heart.draw)
+		heart.draw();
 
 	setTimeout(heart._tick, 1000 / heart._targetFPS);
 }
@@ -119,6 +124,7 @@ heart.attach = function(canvas) {
 
 
 window.onload = function() {
+	if(heart.preload !== undefined)
+		heart.preload();
 	heart._init();
-	heart._tick();
 };

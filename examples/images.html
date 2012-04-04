@@ -10,9 +10,12 @@ var img = {x: 0, y: 0, v: {x: speed, y: speed}, img: null};
 
 var screenHeight, screenWidth;
 
+heart.preload = function() {
+	heart.graphics.newImage("heart.png", function(r) { img.img = r; });
+}
+
 heart.load = function() {
 	heart.attach("cnv");
-	img.img = heart.graphics.newImage("heart.png");
 	img.w = img.img.getWidth();
 	img.h = img.img.getHeight();
 
