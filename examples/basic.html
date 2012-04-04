@@ -19,7 +19,7 @@ love.draw = function() {
 	love.graphics.rectangle("fill", player.x, player.y, 100, 100);
 
 	love.graphics.setColor(255, 255, 0);
-	love.graphics.print("fps: " + love.graphics.getFPS(), 10, 10);
+	love.graphics.print("fps: " + love.timer.getFPS(), 10, 10);
 }
 
 </script>

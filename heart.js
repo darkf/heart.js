@@ -27,7 +27,9 @@ heart.graphics = {
 	setColor: function(r, g, b) {
 		heart.ctx.fillStyle = heart.ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
 	},
+};
 
+heart.timer = {
 	getFPS: function() {
 		return heart._fps;
 	}
