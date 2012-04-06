@@ -7,6 +7,8 @@
    but you take what you can get, right? */
 
 var player = {x: 200, y: 200, speed: 50, img: null};
+var lastTime = new Date().getTime();
+var COLOR_DELAY = 0.5 /* seconds */;
 
 heart.preload = function() {
 	heart.graphics.newImage("heart.png", function(r) { player.img = r; });
@@ -26,6 +28,16 @@ heart.update = function(dt) {
 		player.y -= player.speed * dt;
 	else if(heart.keyboard.isDown("down"))
 		player.y += player.speed * dt;
+
+	if(heart.keyboard.isDown(" ")) {
+		if((new Date().getTime() - lastTime) >= 1000*COLOR_DELAY) {
+			var r = Math.round(Math.random()*255);
+			var g = Math.round(Math.random()*255);
+			var b = Math.round(Math.random()*255);
+			heart.graphics.setBackgroundColor(r, g, b);
+			lastTime = new Date().getTime();
+		}
+	}
 }
 
 heart.draw = function() {
