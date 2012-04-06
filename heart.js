@@ -15,7 +15,8 @@ var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
 			  _targetFPS: 30, /* the target FPS cap */
 			  bg: {r: 127, g: 127, b: 127}, /* background color */
 			  _size: {w: 800, h: 600}, /* size of viewport */
-			  _imagesLoading: [] /* for synchronous image loading */
+			  _imagesLoading: [], /* for synchronous image loading */
+			  _keysDown: {} /* which keys are down (char -> bool) */
 			};
 
 var HeartImage = function(img) {
@@ -79,6 +80,12 @@ heart.timer = {
 	}
 };
 
+heart.keyboard = {
+	isDown: function(key) {
+		return heart._keysDown[key];
+	}
+};
+
 heart._init = function() {
 	if(heart._imagesLoading.length !== 0) {
 		setTimeout(heart._init, 30 /* ms */);
@@ -109,7 +116,7 @@ heart._tick = function() {
 		heart.draw();
 
 	setTimeout(heart._tick, 1000 / heart._targetFPS);
-}
+};
 
 heart.attach = function(canvas) {
 	var el = document.getElementById(canvas);
@@ -121,6 +128,34 @@ heart.attach = function(canvas) {
 		alert("couldn't get canvas context")
 };
 
+heart._getKeyChar = function(c) {
+	/* supply a hacky keymap */
+	switch(c) {
+		/* arrow keys */
+		case 38: return "up";
+		case 37: return "left";
+		case 39: return "right";
+		case 40: return "down";
+	}
+
+	return String.fromCharCode(c);
+};
+
+// XXX: we need a keymap, since browsers decide on being annoying and
+// not having a consistent keymap. (also, this won't work with special characters.)
+window.onkeydown = function(e) {
+	var c = heart._getKeyChar(e.keyCode);
+	heart._keysDown[c] = true;
+	if(heart.keydown !== undefined)
+		heart.keydown(c);
+};
+
+window.onkeyup = function(e) {
+	var c = heart._getKeyChar(e.keyCode);
+	heart._keysDown[c] = false;
+	if(heart.keyup !== undefined)
+		heart.keyup(c);
+};
 
 window.onload = function() {
 	if(heart.preload !== undefined)
