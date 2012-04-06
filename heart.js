@@ -58,10 +58,9 @@ heart.graphics = {
 		/* load an image */
 		/* XXX: does not handle errors */
 		var img = new Image();
-		var i = heart._imagesLoading.length;
 		heart._imagesLoading.push(img);
 		img.onload = function() {
-			heart._imagesLoading.splice(i, 1); /* remove img from the loading sequence */
+			heart._imagesLoading.splice(heart._imagesLoading.indexOf(img), 1); /* remove img from the loading sequence */
 			callback(new HeartImage(img));
 		};
 		img.src = src;
