@@ -13,7 +13,7 @@ var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
 			  _dt: 0, /* time since last tick in seconds */
 			  _fps: 0, /* frames per second */
 			  _targetFPS: 30, /* the target FPS cap */
-			  bg: {r: 127, g: 127, b: 127}, /* background color */
+			  _bg: {r: 127, g: 127, b: 127}, /* background color */
 			  _size: {w: 800, h: 600}, /* size of viewport */
 			  _imagesLoading: [], /* for synchronous image loading */
 			  _keysDown: {} /* which keys are down (char -> bool) */
@@ -53,6 +53,14 @@ heart.graphics = {
 
 	getHeight: function() {
 		return heart._size.h;
+	},
+
+	getBackgroundColor: function() {
+		return heart._bg;
+	},
+
+	setBackgroundColor: function(r, g, b) {
+		heart._bg = {r: r, g: g, b: b};
 	},
 
 	newImage: function(src, callback) {
@@ -114,7 +122,7 @@ heart._tick = function() {
 	if(heart.update)
 		heart.update(heart._dt / 1000);
 
-	heart.ctx.fillStyle = "rgb("+heart.bg.r+","+heart.bg.g+","+heart.bg.b+")";
+	heart.ctx.fillStyle = "rgb("+heart._bg.r+","+heart._bg.g+","+heart._bg.b+")";
 	heart.ctx.fillRect(0, 0, heart._size.w, heart._size.h);
 	if(heart.draw)
 		heart.draw();
