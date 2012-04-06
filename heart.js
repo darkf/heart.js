@@ -85,6 +85,10 @@ heart.graphics = {
 heart.timer = {
 	getFPS: function() {
 		return heart._fps;
+	},
+
+	getTime: function() {
+		return new Date().getTime();
 	}
 };
 

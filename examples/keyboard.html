@@ -7,7 +7,7 @@
    but you take what you can get, right? */
 
 var player = {x: 200, y: 200, v: {x: 0, y: 0}, speed: 50, img: null};
-var lastTime = new Date().getTime();
+var lastTime = heart.timer.getTime();
 var COLOR_DELAY = 0.5 /* seconds */;
 
 heart.preload = function() {
@@ -46,7 +46,7 @@ heart.update = function(dt) {
 
 	/* change colors every COLOR_DELAY seconds if space is pressed */
 	if(heart.keyboard.isDown(" ")) {
-		if((new Date().getTime() - lastTime) >= 1000*COLOR_DELAY) {
+		if((heart.timer.getTime() - lastTime) >= 1000*COLOR_DELAY) {
 			var r = Math.round(Math.random()*255);
 			var g = Math.round(Math.random()*255);
 			var b = Math.round(Math.random()*255);
