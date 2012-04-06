@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>heart.js test</title>
+<script src="../heart.js"></script>
+<script>
+/* Command a raging red heart, straight from the depths of the dragon's lair! What could be more fun? Perhaps 10 tons of fun,
+   but you take what you can get, right? */
+
+var player = {x: 200, y: 200, speed: 50, img: null};
+
+heart.preload = function() {
+	heart.graphics.newImage("heart.png", function(r) { player.img = r; });
+}
+
+heart.load = function() {
+	heart.attach("cnv");
+}
+
+heart.update = function(dt) {
+	if(heart.keyboard.isDown("left"))
+		player.x -= player.speed * dt;
+	else if(heart.keyboard.isDown("right"))
+		player.x += player.speed * dt;
+
+	if(heart.keyboard.isDown("up"))
+		player.y -= player.speed * dt;
+	else if(heart.keyboard.isDown("down"))
+		player.y += player.speed * dt;
+}
+
+heart.draw = function() {
+	heart.graphics.draw(player.img, player.x, player.y);
+
+	heart.graphics.setColor(255, 255, 0);
+	heart.graphics.print("fps: " + heart.timer.getFPS(), 10, 10);
+}
+
+</script>
+</head>
+<body>
+
+<canvas id="cnv" width="800" height="600">your browser doesn't support &lt;canvas&gt;</canvas>
+
+</body>
+</html>
