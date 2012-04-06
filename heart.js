@@ -83,6 +83,10 @@ heart.timer = {
 heart.keyboard = {
 	isDown: function(key) {
 		return heart._keysDown[key];
+	},
+
+	isUp: function(key) {
+		return !heart.keyboard.isDown(key);
 	}
 };
 
