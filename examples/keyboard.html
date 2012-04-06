@@ -29,6 +29,20 @@ heart.update = function(dt) {
 	else if(heart.keyboard.isDown("down"))
 		player.y += player.speed * dt;
 
+
+	/* wrap around */
+	if(player.x <= 0)
+		player.x = heart.graphics.getWidth();
+	else if(player.x >= heart.graphics.getWidth())
+		player.x = 0;
+
+	if(player.y <= 0)
+		player.y = heart.graphics.getHeight();
+	else if(player.y >= heart.graphics.getHeight())
+		player.y = 0;
+
+
+	/* change colors every COLOR_DELAY seconds if space is pressed */
 	if(heart.keyboard.isDown(" ")) {
 		if((new Date().getTime() - lastTime) >= 1000*COLOR_DELAY) {
 			var r = Math.round(Math.random()*255);
