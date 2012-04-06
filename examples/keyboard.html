@@ -6,7 +6,7 @@
 /* Command a raging red heart, straight from the depths of the dragon's lair! What could be more fun? Perhaps 10 tons of fun,
    but you take what you can get, right? */
 
-var player = {x: 200, y: 200, speed: 50, img: null};
+var player = {x: 200, y: 200, v: {x: 0, y: 0}, speed: 50, img: null};
 var lastTime = new Date().getTime();
 var COLOR_DELAY = 0.5 /* seconds */;
 
@@ -20,15 +20,17 @@ heart.load = function() {
 
 heart.update = function(dt) {
 	if(heart.keyboard.isDown("left"))
-		player.x -= player.speed * dt;
+		player.v.x -= player.speed * dt;
 	else if(heart.keyboard.isDown("right"))
-		player.x += player.speed * dt;
+		player.v.x += player.speed * dt;
 
 	if(heart.keyboard.isDown("up"))
-		player.y -= player.speed * dt;
+		player.v.y -= player.speed * dt;
 	else if(heart.keyboard.isDown("down"))
-		player.y += player.speed * dt;
+		player.v.y += player.speed * dt;
 
+	player.x += player.v.x * dt;
+	player.y += player.v.y * dt;
 
 	/* wrap around */
 	if(player.x <= 0)
