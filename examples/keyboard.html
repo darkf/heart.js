@@ -6,9 +6,10 @@
 /* Command a raging red heart, straight from the depths of the dragon's lair! What could be more fun? Perhaps 10 tons of fun,
    but you take what you can get, right? */
 
-var player = {x: 200, y: 200, v: {x: 0, y: 0}, speed: 50, img: null};
+var player = {x: 200, y: 200, v: {x: 0, y: 0}, speed: 200, img: null};
 var lastTime = heart.timer.getTime();
 var COLOR_DELAY = 0.5 /* seconds */;
+var FRICTION = 0.99; /* coefficient for friction */
 
 heart.preload = function() {
 	heart.graphics.newImage("heart.png", function(r) { player.img = r; });
@@ -16,6 +17,7 @@ heart.preload = function() {
 
 heart.load = function() {
 	heart.attach("cnv");
+	heart.timer.setTargetFPS(60);
 }
 
 heart.update = function(dt) {
@@ -23,11 +25,15 @@ heart.update = function(dt) {
 		player.v.x -= player.speed * dt;
 	else if(heart.keyboard.isDown("right"))
 		player.v.x += player.speed * dt;
+	else
+		player.v.x *= FRICTION;
 
 	if(heart.keyboard.isDown("up"))
 		player.v.y -= player.speed * dt;
 	else if(heart.keyboard.isDown("down"))
 		player.v.y += player.speed * dt;
+	else
+		player.v.y *= FRICTION;
 
 	player.x += player.v.x * dt;
 	player.y += player.v.y * dt;
