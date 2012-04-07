@@ -87,6 +87,14 @@ heart.timer = {
 		return heart._fps;
 	},
 
+	getTargetFPS: function() {
+		return heart._targetFPS;
+	},
+
+	setTargetFPS: function(fps) {
+		heart._targetFPS = fps;
+	},
+
 	getTime: function() {
 		return new Date().getTime();
 	}
