@@ -162,7 +162,7 @@ heart._getKeyChar = function(c) {
 		case 40: return "down";
 	}
 
-	return String.fromCharCode(c);
+	return String.fromCharCode(c).toLowerCase();
 };
 
 // XXX: we need a keymap, since browsers decide on being annoying and
