@@ -110,6 +110,27 @@ heart.keyboard = {
 	}
 };
 
+heart.mouse = {
+	_pos: {x: 0, y: 0},
+	_btnState: {"l": false, "r": false}, /* left and right button press state */
+
+	getPosition: function() {
+		return [heart.mouse._pos.x, heart.mouse._pos.y];
+	},
+
+	getX: function() {
+		return heart.mouse._pos.x;
+	},
+
+	getY: function() {
+		return heart.mouse._pos.y;
+	},
+
+	isDown: function(button) {
+		return heart.mouse._btnState[button] !== undefined ? heart.mouse._btnState[button] : false;
+	}
+};
+
 heart._init = function() {
 	/* if we're waiting on images to load, spinlock */
 	if(heart._imagesLoading.length !== 0) {
@@ -121,6 +142,25 @@ heart._init = function() {
 		heart.load();
 	if(heart.canvas === undefined || heart.ctx === undefined)
 		alert("no canvas");
+
+	/* register for mouse-related events (pertaining to the canvas) */
+	heart.canvas.onmousedown = function(e) {
+		var btn = heart._mouseButtonName(e.which);
+		heart.mouse._btnState[btn] = true;
+		if(heart.mousepressed)
+			heart.mousepressed(e.offsetX, e.offsetY, btn);
+	};
+
+	heart.canvas.onmouseup = function(e) {
+		var btn = heart._mouseButtonName(e.which);
+		heart.mouse._btnState[btn] = false;
+		if(heart.mousereleased)
+			heart.mousereleased(e.offsetX, e.offsetY, btn);
+	};
+
+	heart.canvas.onmousemove = function(e) {
+		heart.mouse._pos = {x: e.offsetX, y: e.offsetY};
+	};
 
 	heart._tick(); /* first tick */
 };
@@ -150,6 +190,16 @@ heart.attach = function(canvas) {
 	heart.ctx = heart.canvas.getContext("2d");
 	if(!heart.ctx)
 		alert("couldn't get canvas context")
+};
+
+heart._mouseButtonName = function(n) {
+	switch(n) {
+		case 1: return "l";
+		case 2: return "m";
+		case 3: return "r";
+	}
+
+	return "unknown";
 };
 
 heart._getKeyChar = function(c) {
