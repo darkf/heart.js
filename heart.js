@@ -155,20 +155,20 @@ heart._init = function() {
 		var btn = heart._mouseButtonName(e.which);
 		heart.mouse._btnState[btn] = true;
 		if(heart.mousepressed)
-			heart.mousepressed(e.offsetX, e.offsetY, btn);
+			heart.mousepressed(e.pageX, e.pageY, btn);
 	};
 
 	heart.canvas.onmouseup = function(e) {
 		var btn = heart._mouseButtonName(e.which);
 		heart.mouse._btnState[btn] = false;
 		if(heart.mousereleased)
-			heart.mousereleased(e.offsetX, e.offsetY, btn);
+			heart.mousereleased(e.pageX, e.pageY, btn);
 	};
 
 	heart.canvas.onmousemove = function(e) {
-		heart.mouse._pos = {x: e.offsetX, y: e.offsetY};
+		heart.mouse._pos = {x: e.pageX, y: e.pageY};
 		if(heart.mousemoved)
-			heart.mousemoved(e.offsetX, e.offsetY);
+			heart.mousemoved(e.pageX, e.pageY);
 	};
 
 	heart._tick(); /* first tick */
