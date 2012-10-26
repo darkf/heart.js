@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>heart.js test [derpdraw]</title>
+<script src="../heart.js"></script>
+<script>
+var lines = [];
+var MIN_DISTANCE = 20; /* minimum distance for the mouse to go before making a new line */
+var SCREEN_WIDTH;
+
+function manhattanDistance(a, b) {
+	return Math.abs(b.x-a.x) + Math.abs(b.y-a.y);
+}
+
+heart.load = function() {
+	heart.attach("cnv");
+	heart.timer.setTargetFPS(20);
+	SCREEN_WIDTH = heart.graphics.getWidth();
+}
+
+heart.mousepressed = function(x, y, btn) {
+	if(btn !== "l") return;
+	lines.push([{x:x, y:y}]); /* add new line group */
+}
+
+heart.mousemoved = function(x, y) {
+	if(!heart.mouse.isDown("l")) return;
+	if(lines.length === 0) return;
+
+	var last = lines[lines.length-1];
+	if(manhattanDistance(last[last.length-1], {x:x, y:y}) >= MIN_DISTANCE)
+		last.push({x: x, y: y}); /* add new line */
+}
+
+heart.draw = function() {
+	heart.graphics.setColor(255, 0, 0); /* draw lines in red */
+
+	for(var i in lines) {
+		var lineGroup = lines[i];
+		var x = lineGroup[0].x;
+		var y = lineGroup[0].y;
+
+		for(var j in lineGroup) {
+			var line = lineGroup[j];
+			heart.graphics.line(x, y, line.x, line.y); /* draw the line */
+			heart.graphics.line(SCREEN_WIDTH - x, y, SCREEN_WIDTH - line.x, line.y); /* draw the line from the right */
+			x = line.x; y = line.y;
+		}
+	}
+
+	heart.graphics.setColor(255, 255, 0);
+	heart.graphics.print("fps: " + heart.timer.getFPS(), 10, 10);
+}
+
+</script>
+</head>
+<body>
+
+<canvas id="cnv" width="800" height="600">your browser doesn't support &lt;canvas&gt;</canvas><br/>
+Click and drag to draw
+
+</body>
+</html>
