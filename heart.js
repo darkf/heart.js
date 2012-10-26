@@ -39,6 +39,13 @@ heart.graphics = {
 			heart.ctx.strokeRect(x, y, w, h);
 	},
 
+	line: function(x1, y1, x2, y2) {
+		heart.ctx.beginPath();
+		heart.ctx.moveTo(x1, y1);
+		heart.ctx.lineTo(x2, y2);
+		heart.ctx.stroke();
+	},
+
 	print: function(text, x, y) {
 		heart.ctx.fillText(text, x, y);
 	},
@@ -160,6 +167,8 @@ heart._init = function() {
 
 	heart.canvas.onmousemove = function(e) {
 		heart.mouse._pos = {x: e.offsetX, y: e.offsetY};
+		if(heart.mousemoved)
+			heart.mousemoved(e.offsetX, e.offsetY);
 	};
 
 	heart._tick(); /* first tick */
