@@ -111,6 +111,7 @@ heart.keyboard = {
 };
 
 heart._init = function() {
+	/* if we're waiting on images to load, spinlock */
 	if(heart._imagesLoading.length !== 0) {
 		setTimeout(heart._init, 30 /* ms */);
 		return;
@@ -125,7 +126,6 @@ heart._init = function() {
 };
 
 heart._tick = function() {
-	/* if we're waiting on images to load, skip the frame */
 	var time = new Date().getTime();
 	heart._dt = time - heart._lastTick;
 	heart._lastTick = time;
