@@ -39,6 +39,15 @@ heart.graphics = {
 			heart.ctx.strokeRect(x, y, w, h);
 	},
 
+	circle: function(mode, x, y, radius) {
+		heart.ctx.beginPath();
+		heart.ctx.arc(x, y, radius, 0, Math.PI*2, false);
+		if(mode === "fill")
+			heart.ctx.fill();
+		else
+			heart.ctx.stroke();
+	},
+
 	line: function(x1, y1, x2, y2) {
 		heart.ctx.beginPath();
 		heart.ctx.moveTo(x1, y1);
