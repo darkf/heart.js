@@ -1,12 +1,12 @@
 <html>
 <head>
-<title>heart.js test</title>
+<title>heart.js rotation test</title>
 <script src="../heart.js"></script>
 <script>
-/* One of those fancy DVD screensavers that bounces from side to side! Whoo! */
+/* Whoa, dude, that heart is rotating! */
 
-var speed = 100;
-var angle = 20; // degrees per second
+var speed = 100; // degrees per second
+var angle = 0;
 var img = null;
 
 var screenHeight, screenWidth;
@@ -25,7 +25,7 @@ heart.load = function() {
 }
 
 heart.update = function(dt) {
-	// convert the angle to radians
+	// convert the speed to radians and increment angle by it
 	angle += (speed * Math.PI/180) * dt;
 }
 
