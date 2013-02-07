@@ -95,6 +95,22 @@ heart.graphics = {
 		if(drawable.img !== undefined) {
 			heart.ctx.drawImage(drawable.img, x, y);
 		}
+	},
+
+	translate: function(x, y) {
+		heart.ctx.translate(x, y);
+	},
+
+	rotate: function(angle) {
+		heart.ctx.rotate(angle);
+	},
+
+	push: function() {
+		heart.ctx.save();
+	},
+
+	pop: function() {
+		heart.ctx.restore();
 	}
 };
 
