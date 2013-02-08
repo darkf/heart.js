@@ -59,8 +59,14 @@ heart.graphics = {
 		heart.ctx.fillText(text, x, y);
 	},
 
-	setColor: function(r, g, b) {
-		heart.ctx.fillStyle = heart.ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
+	setColor: function(r, g, b, a) {
+		if(a === undefined) {
+			heart.ctx.fillStyle = heart.ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
+		}
+		else {
+			a = (a/255).toFixed(1); // input is in 0..255, output is in 0.0..1.0
+			heart.ctx.fillStyle = heart.ctx.strokeStyle = "rgba("+r+","+g+","+b+","+a+")";
+		}
 	},
 
 	getWidth: function() {
