@@ -250,6 +250,8 @@ heart._getKeyChar = function(c) {
 		case 37: return "left";
 		case 39: return "right";
 		case 40: return "down";
+		case 27: return "escape";
+		case 13: return "return";
 	}
 
 	return String.fromCharCode(c).toLowerCase();
