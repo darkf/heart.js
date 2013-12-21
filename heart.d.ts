@@ -26,6 +26,8 @@ declare module heart {
 	export module graphics {
 		export function setColor(r:number, g:number, b:number, a?:number) : void;
 		export function rectangle(mode:string, x:number, y:number, w:number, h:number) : void;
+		export function circle(mode:string, x:number, y:number, radius:number) : void;
+		export function line(x1:number, y1:number, x2:number, y2:number) : void;
 		export function print(msg:string, x:number, y:number) : void;
 		export function draw(drawable:HeartImage, x:number, y:number) : void;
 		export function newImage(path:string, callback : (result:HeartImage) => void);
