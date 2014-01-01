@@ -273,6 +273,13 @@ window.onkeyup = function(e) {
 		heart.keyup(c);
 };
 
+window.onfocus = function(e) {
+	if (heart.focus) heart.focus(true);
+}
+window.onblur = function(e) {
+	if (heart.focus) heart.focus(false);
+}
+
 window.onload = function() {
 	if(heart.preload !== undefined)
 		heart.preload();

@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>heart.js test</title>
+<script src="../heart.js"></script>
+<script>
+/* Command a raging red heart, straight from the depths of the dragon's lair! What could be more fun? Perhaps 10 tons of fun,
+   but you take what you can get, right? */
+
+var gameIsPaused = false;
+var player = {x: 200, y: 200, v: {x: 0, y: 0}, speed: 200, img: null};
+var lastTime = heart.timer.getTime();
+var COLOR_DELAY = 0.5 /* seconds */;
+var FRICTION = 0.99; /* coefficient for friction */
+
+heart.preload = function() {
+	heart.graphics.newImage("heart.png", function(r) { player.img = r; });
+}
+
+heart.load = function() {
+	heart.attach("cnv");
+	heart.timer.setTargetFPS(60);
+}
+
+heart.update = function(dt) {
+	if (gameIsPaused) return;
+	if(heart.keyboard.isDown("left"))
+		player.v.x -= player.speed * dt;
+	else if(heart.keyboard.isDown("right"))
+		player.v.x += player.speed * dt;
+	else
+		player.v.x *= FRICTION;
+
+	if(heart.keyboard.isDown("up"))
+		player.v.y -= player.speed * dt;
+	else if(heart.keyboard.isDown("down"))
+		player.v.y += player.speed * dt;
+	else
+		player.v.y *= FRICTION;
+
+	player.x += player.v.x * dt;
+	player.y += player.v.y * dt;
+
+	/* wrap around */
+	if(player.x <= 0)
+		player.x = heart.graphics.getWidth();
+	else if(player.x >= heart.graphics.getWidth())
+		player.x = 0;
+
+	if(player.y <= 0)
+		player.y = heart.graphics.getHeight();
+	else if(player.y >= heart.graphics.getHeight())
+		player.y = 0;
+
+
+	/* change colors every COLOR_DELAY seconds if space is pressed */
+	if(heart.keyboard.isDown(" ")) {
+		if((heart.timer.getTime() - lastTime) >= 1000*COLOR_DELAY) {
+			var r = Math.round(Math.random()*255);
+			var g = Math.round(Math.random()*255);
+			var b = Math.round(Math.random()*255);
+			heart.graphics.setBackgroundColor(r, g, b);
+			lastTime = new Date().getTime();
+		}
+	}
+}
+
+heart.draw = function() {
+	heart.graphics.draw(player.img, player.x, player.y);
+
+	heart.graphics.setColor(255, 255, 0);
+	heart.graphics.print("fps: " + heart.timer.getFPS(), 10, 10);
+
+	if (gameIsPaused) {
+		heart.graphics.setColor(0, 0, 0, 100);
+		heart.graphics.rectangle("fill", 0, 0, heart.graphics.getWidth(), heart.graphics.getHeight());
+		heart.graphics.print("-- PAUSED --", heart.graphics.getWidth()/2, heart.graphics.getHeight()/2);
+	}
+}
+
+heart.focus = function(f) {
+	gameIsPaused = !f;
+}
+
+</script>
+</head>
+<body>
+
+<canvas id="cnv" width="800" height="600">your browser doesn't support &lt;canvas&gt;</canvas>
+
+</body>
+</html>
