@@ -9,6 +9,17 @@
    Thank you for using heart.js! :-)
 */
 
+(function (root, factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD module
+		define(factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS module (Node or Browserify)
+		module.exports = factory();
+	} else {
+		root.heart = factory();
+	}
+})(this, function() {
 var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
 			  _dt: 0, /* time since last tick in seconds */
 			  _fps: 0, /* frames per second */
@@ -278,3 +289,6 @@ window.onload = function() {
 		heart.preload();
 	heart._init();
 };
+
+return heart;
+});
