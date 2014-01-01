@@ -291,6 +291,12 @@ window.onblur = function(e) {
 	if (heart.focus) heart.focus(false);
 }
 
+window.onbeforeunload = function(e) {
+	if (heart.quit && heart.quit()) {
+		e.preventDefault();
+	}
+}
+
 window.onload = function() {
 	if(heart.preload !== undefined)
 		heart.preload();

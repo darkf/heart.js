@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>heart.js test</title>
+<script src="../heart.js"></script>
+<script>
+/* Shows a white square traveling to the bottom-right of the screen at 10 Hz. */
+
+var square = {x: 50, y: 50, speed: 10};
+
+heart.load = function() {
+	heart.attach("cnv");
+}
+
+heart.update = function(dt) {
+	square.x += square.speed * dt;
+	square.y += square.speed * dt;
+}
+
+heart.draw = function() {
+	heart.graphics.setColor(255, 255, 255)
+	heart.graphics.rectangle("fill", square.x, square.y, 100, 100);
+
+	heart.graphics.setColor(255, 255, 0);
+	heart.graphics.print("fps: " + heart.timer.getFPS(), 10, 10);
+}
+
+heart.quit = function() {
+	return !confirm("Are you sure you want to quit?");
+}
+
+</script>
+</head>
+<body>
+
+<canvas id="cnv" width="800" height="600">your browser doesn't support &lt;canvas&gt;</canvas>
+
+</body>
+</html>
