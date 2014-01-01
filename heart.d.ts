@@ -11,6 +11,7 @@ declare module heart {
 	// overridable callbacks
 	export var preload : () => void;
 	export var load : () => void;
+	export var focus : (focused:boolean) => void;
 	export var keydown : (char:string) => void;
 	export var keyup : (char:string) => void;
 	export var update : (dt:number) => void;
