@@ -30,15 +30,15 @@ var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
 			  _keysDown: {} /* which keys are down (char -> bool) */
 			};
 
-var HeartImage = function(img) {
+heart.HeartImage = function(img) {
 	this.img = img;
 };
 
-HeartImage.prototype.getWidth = function() {
+heart.HeartImage.prototype.getWidth = function() {
 	return this.img.width;
 };
 
-HeartImage.prototype.getHeight = function() {
+heart.HeartImage.prototype.getHeight = function() {
 	return this.img.height;
 };
 
@@ -103,7 +103,7 @@ heart.graphics = {
 		heart._imagesLoading.push(img);
 		img.onload = function() {
 			heart._imagesLoading.splice(heart._imagesLoading.indexOf(img), 1); /* remove img from the loading sequence */
-			callback(new HeartImage(img));
+			callback(new heart.HeartImage(img));
 		};
 		img.src = src;
 	},
