@@ -213,6 +213,13 @@ heart._init = function() {
 			heart.mousemoved(e.pageX, e.pageY);
 	};
 
+	/* keypressed and keyreleased are aliases to
+	   keydown and keyup, respectively. */
+	if(heart.keydown === undefined)
+		heart.keydown = heart.keypressed;
+	if(heart.keyup === undefined)
+		heart.keyup = heart.keyreleased;
+
 	heart._tick(); /* first tick */
 };
 
