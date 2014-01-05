@@ -299,8 +299,9 @@ window.onblur = function(e) {
 }
 
 window.onbeforeunload = function(e) {
-	if (heart.quit && heart.quit()) {
-		e.preventDefault();
+	if (heart.quit) {
+		var ret = heart.quit();
+		if (ret) return ret;
 	}
 }
 
