@@ -11,11 +11,18 @@ declare module heart {
 	// overridable callbacks
 	export var preload : () => void;
 	export var load : () => void;
+	export var update : (dt:number) => void;
+	export var draw : () => void;
 	export var focus : (focused:boolean) => void;
 	export var keydown : (char:string) => void;
 	export var keyup : (char:string) => void;
-	export var update : (dt:number) => void;
-	export var draw : () => void;
+	// aliases for the above
+	export var keypressed : (char:string) => void;
+	export var keyreleased  : (char:string) => void;
+	// mouse events
+	export var mousepressed : (x:number, y:number, btn:string) => void;
+	export var mousereleased : (x:number, y:number, btn:string) => void;
+	export var mousemoved : (x:number, y:number) => void;
 
 	export class HeartImage {
 		img : HTMLImageElement;
@@ -38,6 +45,13 @@ declare module heart {
 		export function pop() : void;
 		export function translate(x:number, y:number) : void;
 		export function rotate(angle:number) : void;
+	}
+
+	export module mouse {
+		export function getPosition() : number[];
+		export function getX() : number;
+		export function getY() : number;
+		export function isDown(button:string) : boolean;
 	}
 
 	export module timer {
