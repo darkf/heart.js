@@ -33,6 +33,8 @@ declare module heart {
 	// submodules
 	export module graphics {
 		export function setColor(r:number, g:number, b:number, a?:number) : void;
+		export function getBackgroundColor() : number[];
+		export function setBackgroundColor(r:number, g:number, b:number) : void;
 		export function rectangle(mode:string, x:number, y:number, w:number, h:number) : void;
 		export function circle(mode:string, x:number, y:number, radius:number) : void;
 		export function line(x1:number, y1:number, x2:number, y2:number) : void;
@@ -52,6 +54,11 @@ declare module heart {
 		export function getX() : number;
 		export function getY() : number;
 		export function isDown(button:string) : boolean;
+	}
+
+	export module keyboard {
+		export function isDown(key:string) : boolean;
+		export function isUp(key:string) : boolean;
 	}
 
 	export module timer {
