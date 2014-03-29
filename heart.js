@@ -9,6 +9,17 @@
    Thank you for using heart.js! :-)
 */
 
+(function (root, factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD module
+		define(factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS module (Node or Browserify)
+		module.exports = factory();
+	} else {
+		root.heart = factory();
+	}
+})(this, function() {
 var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
 			  _dt: 0, /* time since last tick in seconds */
 			  _fps: 0, /* frames per second */
@@ -19,15 +30,15 @@ var heart = { _lastTick: new Date().getTime(), /* time of the last tick */
 			  _keysDown: {} /* which keys are down (char -> bool) */
 			};
 
-var HeartImage = function(img) {
+heart.HeartImage = function(img) {
 	this.img = img;
 };
 
-HeartImage.prototype.getWidth = function() {
+heart.HeartImage.prototype.getWidth = function() {
 	return this.img.width;
 };
 
-HeartImage.prototype.getHeight = function() {
+heart.HeartImage.prototype.getHeight = function() {
 	return this.img.height;
 };
 
@@ -39,6 +50,15 @@ heart.graphics = {
 			heart.ctx.strokeRect(x, y, w, h);
 	},
 
+	circle: function(mode, x, y, radius) {
+		heart.ctx.beginPath();
+		heart.ctx.arc(x, y, radius, 0, Math.PI*2, false);
+		if(mode === "fill")
+			heart.ctx.fill();
+		else
+			heart.ctx.stroke();
+	},
+
 	line: function(x1, y1, x2, y2) {
 		heart.ctx.beginPath();
 		heart.ctx.moveTo(x1, y1);
@@ -46,12 +66,43 @@ heart.graphics = {
 		heart.ctx.stroke();
 	},
 
+	polygon: function(mode, vertices) {
+		if(vertices.length === undefined)
+			vertices = Array.prototype.slice.call(arguments, 1);
+
+		if(vertices.length <= 2) return;
+
+		if(vertices.length % 2 !== 0) {
+			throw "heart.graphics.polygon: number of vertices isn't even," +
+				  " meaning you don't have x,y pairs";
+		}
+
+		heart.ctx.beginPath();
+		heart.ctx.moveTo(vertices[0], vertices[1])
+		for(var i = 2; i < vertices.length; i += 2) {
+			heart.ctx.lineTo(vertices[i], vertices[i+1]);
+		}
+
+		if(mode === "fill")
+			heart.ctx.fill();
+		else {
+			heart.ctx.lineTo(vertices[0], vertices[1]); // close the polygon
+			heart.ctx.stroke();
+		}
+	},
+
 	print: function(text, x, y) {
 		heart.ctx.fillText(text, x, y);
 	},
 
-	setColor: function(r, g, b) {
-		heart.ctx.fillStyle = heart.ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
+	setColor: function(r, g, b, a) {
+		if(a === undefined) {
+			heart.ctx.fillStyle = heart.ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
+		}
+		else {
+			a = (a/255).toFixed(1); // input is in 0..255, output is in 0.0..1.0
+			heart.ctx.fillStyle = heart.ctx.strokeStyle = "rgba("+r+","+g+","+b+","+a+")";
+		}
 	},
 
 	getWidth: function() {
@@ -77,7 +128,7 @@ heart.graphics = {
 		heart._imagesLoading.push(img);
 		img.onload = function() {
 			heart._imagesLoading.splice(heart._imagesLoading.indexOf(img), 1); /* remove img from the loading sequence */
-			callback(new HeartImage(img));
+			callback(new heart.HeartImage(img));
 		};
 		img.src = src;
 	},
@@ -86,6 +137,22 @@ heart.graphics = {
 		if(drawable.img !== undefined) {
 			heart.ctx.drawImage(drawable.img, x, y);
 		}
+	},
+
+	translate: function(x, y) {
+		heart.ctx.translate(x, y);
+	},
+
+	rotate: function(angle) {
+		heart.ctx.rotate(angle);
+	},
+
+	push: function() {
+		heart.ctx.save();
+	},
+
+	pop: function() {
+		heart.ctx.restore();
 	}
 };
 
@@ -171,6 +238,13 @@ heart._init = function() {
 			heart.mousemoved(e.pageX, e.pageY);
 	};
 
+	/* keypressed and keyreleased are aliases to
+	   keydown and keyup, respectively. */
+	if(heart.keydown === undefined)
+		heart.keydown = heart.keypressed;
+	if(heart.keyup === undefined)
+		heart.keyup = heart.keyreleased;
+
 	heart._tick(); /* first tick */
 };
 
@@ -219,6 +293,8 @@ heart._getKeyChar = function(c) {
 		case 37: return "left";
 		case 39: return "right";
 		case 40: return "down";
+		case 27: return "escape";
+		case 13: return "return";
 	}
 
 	return String.fromCharCode(c).toLowerCase();
@@ -240,8 +316,25 @@ window.onkeyup = function(e) {
 		heart.keyup(c);
 };
 
+window.onfocus = function(e) {
+	if (heart.focus) heart.focus(true);
+}
+window.onblur = function(e) {
+	if (heart.focus) heart.focus(false);
+}
+
+window.onbeforeunload = function(e) {
+	if (heart.quit) {
+		var ret = heart.quit();
+		if (ret) return ret;
+	}
+}
+
 window.onload = function() {
 	if(heart.preload !== undefined)
 		heart.preload();
 	heart._init();
 };
+
+return heart;
+});

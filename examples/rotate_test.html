@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>heart.js rotation test</title>
+<script src="../heart.js"></script>
+<script>
+/* Whoa, dude, that heart is rotating! */
+
+var speed = 100; // degrees per second
+var angle = 0;
+var img = null;
+var paused = false;
+
+var screenHeight, screenWidth;
+
+heart.preload = function() {
+	heart.graphics.newImage("heart.png", function(r) { img = r; });
+}
+
+heart.load = function() {
+	heart.attach("cnv");
+	img.w = img.getWidth();
+	img.h = img.getHeight();
+
+	screenWidth  = heart.graphics.getWidth();
+	screenHeight = heart.graphics.getHeight();
+}
+
+heart.update = function(dt) {
+	if(paused) return;
+	// convert the speed to radians and increment angle by it
+	angle += (speed * Math.PI/180) * dt;
+}
+
+heart.keyreleased = function(c) {
+	if(c == 'p') paused = !paused;
+}
+
+heart.draw = function() {
+	// save the drawing state so we can restore it later instead of accumulating rotations/translations across frames
+	heart.graphics.push();
+	// to change the rotation point (we're aiming for the center), we translate first
+	// normally we would also add half of the image's width/height to x/y but we also want to offset our drawing by half less
+	// to center it properly on screen
+	var center = {x: screenWidth/2, y: screenHeight/2};
+	heart.graphics.translate(center.x, center.y);
+	heart.graphics.rotate(angle);
+	// which means we want to offset the position by half the width, then our origin will be in the center
+	heart.graphics.draw(img, -(img.w/2), -(img.h/2));
+	heart.graphics.pop();
+
+	heart.graphics.setColor(255, 255, 0);
+	heart.graphics.print("fps: " + heart.timer.getFPS(), 10, 10);
+}
+
+</script>
+</head>
+<body>
+
+<canvas id="cnv" width="800" height="600">your browser doesn't support &lt;canvas&gt;</canvas>
+
+</body>
+</html>
