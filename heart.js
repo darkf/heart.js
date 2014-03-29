@@ -66,6 +66,31 @@ heart.graphics = {
 		heart.ctx.stroke();
 	},
 
+	polygon: function(mode, vertices) {
+		if(vertices.length === undefined)
+			vertices = Array.prototype.slice.call(arguments, 1);
+
+		if(vertices.length <= 2) return;
+
+		if(vertices.length % 2 !== 0) {
+			throw "heart.graphics.polygon: number of vertices isn't even," +
+				  " meaning you don't have x,y pairs";
+		}
+
+		heart.ctx.beginPath();
+		heart.ctx.moveTo(vertices[0], vertices[1])
+		for(var i = 2; i < vertices.length; i += 2) {
+			heart.ctx.lineTo(vertices[i], vertices[i+1]);
+		}
+
+		if(mode === "fill")
+			heart.ctx.fill();
+		else {
+			heart.ctx.lineTo(vertices[0], vertices[1]); // close the polygon
+			heart.ctx.stroke();
+		}
+	},
+
 	print: function(text, x, y) {
 		heart.ctx.fillText(text, x, y);
 	},
