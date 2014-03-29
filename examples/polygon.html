@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>heart.js test</title>
+<script src="../heart.js"></script>
+<script>
+/* Displays a couple polygons, one stroked and one filled. */
+
+heart.load = function() {
+	heart.attach("cnv");
+}
+
+heart.draw = function() {
+	heart.graphics.setColor(255, 255, 255)
+
+	// Some poorly skewed and rotated square
+	heart.graphics.polygon("line", 
+		100, 5,
+		200, 5,
+		115, 100,
+		30, 50
+	);
+
+	// Draw a rhombus!
+	var baseX = 300;
+	var baseY = 5;
+	var sizeX = 48;
+	var sizeY = 64;
+
+	heart.graphics.polygon("fill", [
+		baseX, baseY,
+		baseX + sizeX, baseY + sizeY,
+		baseX, baseY + sizeY*2,
+		baseX - sizeX, baseY + sizeY
+	]);
+
+	heart.graphics.setColor(255, 255, 0);
+	heart.graphics.print("fps: " + heart.timer.getFPS(), 10, 10);
+}
+
+</script>
+</head>
+<body>
+
+<canvas id="cnv" width="800" height="600">your browser doesn't support &lt;canvas&gt;</canvas>
+
+</body>
+</html>
