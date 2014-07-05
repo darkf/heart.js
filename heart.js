@@ -205,6 +205,58 @@ heart.mouse = {
 	}
 };
 
+heart.system = {
+	// JavaScript is not permitted to access the clipboard in most browsers. We
+	// can use a backdoor in IE, but for other browsers we just use
+	// window.prompt() to make the user do it manually.
+	getClipboardText: function() {
+		if (typeof window.clipboardData !== "undefined") {
+			return window.clipboardData.getData('Text');
+		} else {
+			return window.prompt("Please paste from clipboard:");
+		}
+	},
+	getOS: function() {
+		var agent = window.navigator.userAgent;
+		if (agent.match(/Windows/)) {
+			return "Windows";
+		} else if (agent.match(/Mac/)) {
+			return "OS X";
+		} else if (agent.match(/X11|Linux/)) {
+			return "Linux";
+		}
+	},
+	getPowerInfo: function() {
+		if (typeof window.navigator.battery !== 'undefined') {
+			var b = window.navigator.battery, state;
+			if (b.charging) {
+				state = 'charging';
+			} else if (b.level === 1) {
+				state = 'charged';
+			} else {
+				state = 'battery';
+			}
+			return {
+				state: state,
+				percent: b.level*100,
+				seconds: b.dischargingTime,
+			};
+		} else {
+			return { state: 'unknown' };
+		}
+	},
+	// no implementation of heart.system.getProcessorCount() yet!
+	// this might be done using an extra library:
+	// https://github.com/oftn/core-estimator
+	setClipboardText: function(text) {
+		if (typeof window.clipboardData !== "undefined") {
+			window.clipboardData.setData('Text', text);
+		} else {
+			window.prompt("Please copy to clipboard:", text);
+		}
+	}
+};
+
 heart._init = function() {
 	/* if we're waiting on images to load, spinlock */
 	if(heart._imagesLoading.length !== 0) {
